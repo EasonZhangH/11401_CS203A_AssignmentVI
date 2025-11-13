@@ -14,8 +14,19 @@
 #include "hash_fn.h"
 
 int myHashInt(int key, int m) {
-    // TODO: replace with your own design
-    return key % m;  // division method example
+    //return key % m;  // division method example
+
+    /* 第一個版本 - 改良原先的邏輯 */
+    // 1. 處理邊界情況：如果雜湊表大小無效，回傳 0。
+    if (m <= 0)
+        return 0;
+
+    // 2. 計算原本邏輯下的INDEX
+    int index = key % m;
+
+    // 3. 處理負數情況：如果INDEX是負的，將其調整到 [0, m-1] 的範圍內。
+    // 例如，-1 % 10 = -1，調整後應為 9。
+    return (index < 0) ? (index + m) : index;
 }
 
 int myHashString(const char* str, int m) {
