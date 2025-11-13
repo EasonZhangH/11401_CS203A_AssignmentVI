@@ -11,7 +11,7 @@
 
    Developer: Yu-Feng Huang <yfhuang@saturn.yzu.edu.tw>
  */
-#include <stdio.h>
+#include "hash_fn.h"
 
 int myHashInt(int key, int m) {
     // TODO: replace with your own design
