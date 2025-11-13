@@ -12,6 +12,7 @@
    Developer: Yu-Feng Huang <yfhuang@saturn.yzu.edu.tw>
  */
 #include "hash_fn.h"
+#include <string.h>
 
 int myHashInt(int key, int m) {
     //return key % m;  // division method example
@@ -32,5 +33,21 @@ int myHashInt(int key, int m) {
 int myHashString(const char* str, int m) {
     unsigned long hash = 0;
     // TODO: replace with your own design
-    return (int)(hash % m); // basic division method
+    //return (int)(hash % m); // basic division method
+    /* 第一個版本 - 基本處理*/
+
+    // 1. 處理空字串 + edge case
+    if (m <= 0 || str == NULL || str[0] == '\0') {
+        return 0;
+    }
+
+    // 3. 遍歷字串中的每個字元
+    for (int i = 0; str[i] != '\0'; i++) {
+        char c = str[i];
+        //從字元求成數字才可以計算出key
+        hash = (hash + (unsigned long long)(c - 'a' + 1)) % m;
+    }
+
+    // 4. 回傳結果 (確保是 int 範圍)
+    return (int)(hash % m);
 }
