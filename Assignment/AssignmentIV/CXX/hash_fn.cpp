@@ -27,5 +27,15 @@ int myHashInt(int key, int m) {
 int myHashString(const std::string& str, int m) {
     unsigned long hash = 0;
     // TODO: replace with your own design
-    return static_cast<int>(hash % m);  // basic division method
+    //return static_cast<int>(hash % m);  // basic division method
+
+    if ( m <= 0 || str.empty() )
+        return 0; // edge case 
+
+    for (char c : str)
+        // 將字元轉換為 1-26 的數字 (假設只有小寫字母)
+        hash = (hash + (c - 'a' + 1) ) % m;
+
+    //確保結果為正數並回傳
+    return static_cast<int>(hash);
 }
