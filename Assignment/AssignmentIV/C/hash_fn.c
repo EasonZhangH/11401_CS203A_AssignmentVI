@@ -21,13 +21,20 @@ int myHashInt(int key, int m) {
     // 1. 處理邊界情況：如果雜湊表大小無效，回傳 0。
     if (m <= 0)
         return 0;
+    
+    // 使用 Knuth 建議的乘法雜湊常數
+    unsigned int x = (unsigned int) key;
+    x = x * 2654435761u;   // 乘法雜湊
+    x ^= (x >> 16);        // 混合高位與低位
 
     // 2. 計算原本邏輯下的INDEX
-    int index = key % m;
+    //int index = key % m;
+    int index = (int)(x % m);
 
     // 3. 處理負數情況：如果INDEX是負的，將其調整到 [0, m-1] 的範圍內。
     // 例如，-1 % 10 = -1，調整後應為 9。
-    return (index < 0) ? (index + m) : index;
+    //return (index < 0) ? (index + m) : index;
+    return index;
 }
 
 int myHashString(const char* str, int m) {
