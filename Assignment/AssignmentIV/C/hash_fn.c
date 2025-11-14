@@ -48,11 +48,12 @@ int myHashString(const char* str, int m) {
         return 0;
     }
 
+    const unsigned long long base = 131; // base : 31 37 131
+
     // 3. 遍歷字串中的每個字元
     for (int i = 0; str[i] != '\0'; i++) {
         char c = str[i];
-        //從字元求成數字才可以計算出key
-        hash = (hash + (unsigned long long)(c - 'a' + 1)) % m;
+         hash = (hash * base + (unsigned char)c);
     }
 
     // 4. 回傳結果 (確保是 int 範圍)
