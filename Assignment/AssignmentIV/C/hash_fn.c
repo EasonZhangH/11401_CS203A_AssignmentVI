@@ -7,9 +7,11 @@
     This file contains the hash functions for integer and string keys.
 
    Development History:
-    - 2025/11/11: Initial implementation
+    - 2025/11/13: Initial implementation and completed the first version.
+    - 2025/11/14: Finished the currently final hash_func and updated the C++ version.
+    - 2025/11/17: Wrote the README.
 
-   Developer: Yu-Feng Huang <yfhuang@saturn.yzu.edu.tw>
+   Developer: Eason Zhang(張嘉祥) <s1121432@mail.yzu.edu.tw>
  */
 #include "hash_fn.h"
 #include <string.h>
@@ -48,7 +50,7 @@ int myHashString(const char* str, int m) {
         return 0;
     }
 
-    const unsigned long long base = 131; // base : 31 37 131
+    const unsigned long long base = 31; // base : 31 37 131
 
     // 3. 遍歷字串中的每個字元
     for (int i = 0; str[i] != '\0'; i++) {

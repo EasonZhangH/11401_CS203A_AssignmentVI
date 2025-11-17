@@ -9,9 +9,11 @@
    defined in "hash_fn.cpp".
 
    Development History:
-    - 2025/11/11: Initial implementation
+    - 2025/11/13: Initial implementation and completed the first version.
+    - 2025/11/14: Finished the currently final hash_func and updated the C++ version.
+    - 2025/11/17: Wrote the README.
 
-   Developer: Yu-Feng Huang <yfhuang@saturn.yzu.edu.tw>
+   Developer: Eason Zhang(張嘉祥) <s1121432@mail.yzu.edu.tw>
  */
 
 #include <iostream>
