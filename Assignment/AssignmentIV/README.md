@@ -6,6 +6,35 @@ evaluate their efficiency, and understand their applications in computer science
 
 Developer: 張嘉祥
 Email: s1121432
+version : 288ccfd(string) & 00a2565 (integr)
+
+## 簡單的前處理
+### 編譯環境產生的問題
+Added additional `.h` files so that the project can compile properly in the VSCode environment.
+
+The `#include` statements in `main.cpp` have been updated to reference the `.h` versions accordingly.
+  ```c
+  #ifndef HASH_FN_H
+  #define HASH_FN_H
+
+  int myHashInt(int key, int m);
+  int myHashString(const char *str, int m);
+
+  #endif
+  ```
+
+  ```cxx
+  #ifndef HASH_FUNC_H
+  #define HASH_FUNC_H
+  #include <string>
+
+  int myHashInt(int key, int m);
+
+  int myHashString(const std::string& str, int m);
+
+  #endif
+  ```
+
 
 ## 我的雜湊函數 (My Hash Function)
 
@@ -378,6 +407,35 @@ Email: s1121432
   fox     35
   ...
   ```
+  === screen shot ===
+  ```
+  ![Description](C:\Users\91xh2\Downloads\integer_1.png)
+
+  ![Description](C:\Users\91xh2\Downloads\integer_2.png)
+
+  ![Description](C:\Users\91xh2\Downloads\integer_3.png)
+
+  ![Description](C:\Users\91xh2\Downloads\string_1.png)
+
+  ![Description](C:\Users\91xh2\Downloads\string_2.png)
+
+  ![Description](C:\Users\91xh2\Downloads\string_3.png)
+
+  ```
+- Observations: Outputs align with the analysis, showing better distribution with prime table sizes.
+- Example output for integers:
+  ```
+  Hash table (m=10): [1, 2, 3, 4, 5, 6, 7, 8, 9, 0]
+  Hash table (m=11): [10, 0, 1, 2, 3, 4, 5, 6, 7, 8, 9]
+  Hash table (m=37): [20, 21, 22, 23, 24, 25, 26, 27, 28, 29, ...]
+  ```
+- Example output for strings:
+  ```
+  Hash table (m=10): ["cat", "dog", "bat", "cow", "ant", ...]
+  Hash table (m=11): ["fox", "cat", "dog", "bat", "cow", ...]
+  Hash table (m=37): ["bee", "hen", "pig", "fox", "cat", ...]
+  ```
+- Observations: Outputs align with the analysis, showing better distribution with prime table sizes.
 
 ## 總結分析 (Analysis)
 - **質數 vs. 非質數 $m$**: 
@@ -385,7 +443,7 @@ Email: s1121432
   - 特別是對於較好的雜湊函數（第二次和第三次），$m=37$ 的碰撞率顯著低於 $m=10$ 和 $m=11$。
 - **規律性或碰撞 (Patterns or Collisions)**: 
   - **第一次雜湊**：整數鍵值產生高度規律的線性分佈，字串鍵值則完全集中在索引 0，碰撞率極高。
-  - **第二次雜湊**：整數鍵值仍有規律性。字串鍵值的分佈顯著改善，尤其在 $m=37$ 時達到零碰撞。
+  - **第二次雜湊**：整數鍵值仍有規律性。字串鍵值的分佈顯著改善，尤其在 m=37 時達到零碰撞。
   - **第三次雜湊**：整數鍵值的分佈最為混亂（隨機），規律性最低，這對於雜湊函數來說是理想的特性。字串鍵值在 $m=37$ 時僅有一次碰撞，表現最佳。
 - **改進建議 (Improvements)**: 
   - **整數鍵**: 應使用如 Knuth 乘法雜湊（第三次）這類能有效打亂鍵值位元的分佈型雜湊函數，而不是簡單的取模運算。
@@ -395,4 +453,4 @@ Email: s1121432
 ## 反思 (Reflection)
 1. **雜湊函數設計**：設計一個好的雜湊函數需要平衡**計算效率**和**分佈均勻性**。簡單的取模雖然快速，但分佈差；而 Knuth 乘法和 Polynomial Rolling Hash 雖然計算略複雜，但能顯著提高分佈質量，減少碰撞。
 2. **表格大小的影響**：表格大小 $m$ 對雜湊分佈的影響至關重要。當 $m$ 是一個質數且與雜湊函數的設計參數互質時，通常能產生更均勻的索引序列。
-3. **最佳設計**：在本次實驗中，**第三次雜湊函數**（整數使用 Knuth 乘法，字串使用標準 Polynomial Rolling Hash）配合**質數表格大小 $m=37$** 產生了最優異的結果，碰撞次數最少，分佈最均勻。
+3. **最佳設計**：在本次實驗中，**第三次雜湊函數**（整數使用 Knuth 乘法，字串使用標準 Polynomial Rolling Hash）配合**質數表格大小 $m=37$** 產生了最優異的結果，碰撞次數相對較少，分佈最均勻。
