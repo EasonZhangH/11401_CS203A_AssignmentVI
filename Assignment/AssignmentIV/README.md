@@ -5,7 +5,9 @@ Students are expected to implement and analyze the behavior of hash functions,
 evaluate their efficiency, and understand their applications in computer science.
 
 Developer: 張嘉祥
+
 Email: s1121432
+
 version : 288ccfd(string) & 00a2565 (integr)
 
 ## 簡單的前處理

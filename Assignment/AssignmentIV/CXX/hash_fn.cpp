@@ -39,12 +39,11 @@ int myHashString(const std::string& str, int m) {
     if ( m <= 0 || str.empty() )
         return 0; // edge case 
 
-    const unsigned long long base = 131;
-
     for (char c : str) {
-        // 將字元轉換為 1-26 的數字 (假設只有小寫字母)
-        hash = (hash*base + (unsigned char)c ) % m;
+        // DJB2
+        // 33 是常選的常數 
+        // hash * 33 = hash * (32 + 1) = hash * 32 + hash = hash << 5 + c
+        hash = ((hash << 5) + hash) + c; // hash * 33 + c
     }
-    //確保結果為正數並回傳
-    return static_cast<int>(hash);
+    return hash % m;
 }
