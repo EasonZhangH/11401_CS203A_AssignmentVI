@@ -410,20 +410,18 @@ The `#include` statements in `main.cpp` have been updated to reference the `.h` 
   ...
   ```
   === screen shot ===
-  ```
-  ![Description](C:\Users\91xh2\Downloads\integer_1.png)
+  ![Integer 1](integer_1(CXX).png)
+  
+  ![Integer 2](integer_2(CXX).png)
+  
+  ![Integer 3](integer_3(CXX).png)
+  
+  ![String 1](string_1(CXX).png)
+  
+  ![String 2](string_2(CXX).png)
+  
+  ![String 3](string_3(CXX).png)
 
-  ![Description](C:\Users\91xh2\Downloads\integer_2.png)
-
-  ![Description](C:\Users\91xh2\Downloads\integer_3.png)
-
-  ![Description](C:\Users\91xh2\Downloads\string_1.png)
-
-  ![Description](C:\Users\91xh2\Downloads\string_2.png)
-
-  ![Description](C:\Users\91xh2\Downloads\string_3.png)
-
-  ```
 - Observations: Outputs align with the analysis, showing better distribution with prime table sizes.
 - Example output for integers:
   ```
