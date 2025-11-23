@@ -2,13 +2,17 @@
 
 This assignment focuses on the design and observation of hash functions using C/C++. 
 Students are expected to implement and analyze the behavior of hash functions, 
-evaluate their efficiency, and understand their applications in computer science.
+evaluate their efficiency, and understand their applications in computer science. <br>
 
-Developer: 張嘉祥
+Developer: 張嘉祥 <br>
 
-Email: s1121432
+Email: s1121432 <br>
 
-version : 288ccfd(string) & 00a2565 (integr)
+version : 288ccfd(string) & 00a2565 (integr) <br>
+
+Build Environment
+- Editor: Visual Studio Code  
+- Operating System: Windows 10
 
 ## 簡單的前處理
 ### 編譯環境產生的問題
