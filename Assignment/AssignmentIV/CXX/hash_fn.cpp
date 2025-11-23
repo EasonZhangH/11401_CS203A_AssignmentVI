@@ -40,10 +40,10 @@ int myHashString(const std::string& str, int m) {
         return 0; // edge case 
 
     for (char c : str) {
-        // DJB2
-        // 33 是常選的常數 
-        // hash * 33 = hash * (32 + 1) = hash * 32 + hash = hash << 5 + c
-        hash = ((hash << 5) + hash) + c; // hash * 33 + c
+        //65599 是一個經過大量統計測試後的一個好用的常數，經過了大量測試
+        // hash = c + hash * 64 + hash * 65536 - hash
+        // hash = c + hash * (65536 + 64 - 1) = c + hash * 65599
+        hash = c + (hash << 6) + (hash << 16) - hash;
     }
     return hash % m;
 }
