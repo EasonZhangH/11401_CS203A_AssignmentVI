@@ -86,7 +86,7 @@ The `#include` statements in `main.cpp` have been updated to reference the `.h` 
       return abs_key % m;
   }
   ```
-- Rationale: 在第一次的基礎上增加了對負數的處理，確保雜湊結果在 $0$ 到 $m-1$ 之間。對於給定的正數測試集，其分佈與第一次相同，但提高了函數的健壯性。
+- Rationale: 在第一次的基礎上增加了對負數的處理，確保雜湊結果在 $0$ 到 $m-1$ 之間。對於給定的正數測試集，其分佈與第一次相同，但提高了函數的穩定性/安全性。
 
 #### 非整數鍵 (Non-integer Keys)
 - Formula / pseudocode:
@@ -476,7 +476,7 @@ The `#include` statements in `main.cpp` have been updated to reference the `.h` 
 
 ## 觀察 (Observation)
 ### 雜湊函數實作推斷與分類
-根據您的描述和提供的數據，我們將六種雜湊方法歸納如下：
+六種雜湊方法歸納如下：
 
 | 類別 | 版本 | 雜湊函數名稱 | 實作推斷 | 關鍵特性 |
 | :---: | :---: | :---: | :---: | :---: |
@@ -491,7 +491,7 @@ The `#include` statements in `main.cpp` have been updated to reference the `.h` 
 
 ### 整數雜湊性能分析 (Knuth vs. 簡單取模)
 
-我們針對五種不同的雜湊表大小 ($m$) 進行了分析。性能指標主要包括**標準差**（衡量分佈均勻性，越小越好）和**最大鏈長度**（衡量最壞情況下的性能，越小越好）。
+針對五種不同的雜湊表大小 ($m$) 進行了分析。性能指標主要包括**標準差**（衡量分佈均勻性，越小越好）和**最大鏈長度**（衡量最壞情況下的性能，越小越好）。
 
 #### 整數雜湊性能指標比較表
 
@@ -544,7 +544,7 @@ The `#include` statements in `main.cpp` have been updated to reference the `.h` 
 
 #### 新引入的 DJB2 變體與 SDBM 雜湊分析
 
-根據您提供的測試數據（`改進的stringHashFunction版本.txt`），我們對 DJB2 變體和 SDBM 雜湊進行了相同的性能指標計算，並與原始的 PRH 進行比較。
+對 DJB2 變體和 SDBM 雜湊進行了相同的性能指標計算，並與原始的 PRH 進行比較。
 
 ##### DJB2 變體雜湊 (DJB2 Variant Hash) 性能指標
 
@@ -572,7 +572,7 @@ The `#include` statements in `main.cpp` have been updated to reference the `.h` 
 
 **改進之處：**
 
-新引入的 **DJB2 變體** 和 **SDBM 雜湊** 均屬於業界公認的優秀字串雜湊演算法，它們的改進主要體現在：
+新引入的 **DJB2 變體** 和 **SDBM 雜湊** 屬於業界公認的優秀字串雜湊演算法，它們的改進主要體現在：
 
 1.  **計算效率 (SDBM)**：SDBM 雜湊利用位移操作實現 `hash * 33 + c`，避免了通用乘法指令，**計算速度極快**。
 2.  **位元混淆 (DJB2 變體)**：DJB2 變體採用 `(hash << 6) + (hash << 16) - hash` 的複雜位移組合，實現了比 PRH 更強的**雪崩效應**和**位元混淆**，能更有效地將輸入字串的微小變化分散到整個雜湊值中。
