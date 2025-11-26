@@ -46,15 +46,15 @@ The `#include` statements in `main.cpp` have been updated to reference the `.h` 
 - **C++ 語言版本：** `g++ main.cpp hash_fn.cpp -o test_cpp`
 
 ### 個人補充與建議
-- 在編譯環境與專案規模增大時，建議更細分 header 檔，並將 hash function 進一步物件導向封裝，以利後續維護與擴充。
+- 在後續編譯環境與專案規模增大時，搞不好可以更細分 header 檔，並將 hash function 進一步物件導向封裝，以利後續維護與擴充。(看工程師文章學習到的)
 
 ## 我的雜湊函數 (My Hash Function)
 
-以下是三次實驗中使用的雜湊函數描述。
+以下是三次實驗中使用的雜湊函數描述。其實總共嘗試了五六種方式，但最後選出一種表現比較優秀的當作代表(final version)。
 
 ### 第一次雜湊函數 (First Hash Function)
 
-#### 整數鍵 (Integer Keys)
+#### 整數鍵 (Integer Keys) - Division Method
 - Formula / pseudocode:
   ```c
   // 第一次整數雜湊：純粹取餘數
@@ -64,7 +64,7 @@ The `#include` statements in `main.cpp` have been updated to reference the `.h` 
   ```
 - Rationale: 這是最簡單的雜湊函數，直接使用模運算將鍵值映射到表格大小 $m$ 的範圍內。對於連續或等差數列的鍵值，會產生極差的分佈，碰撞率高。
 
-#### 非整數鍵 (Non-integer Keys)
+#### 非整數鍵 (Non-integer Keys) - All return zero
 - Formula / pseudocode:
   ```c
   // 第一次字串雜湊：全部回傳 0
@@ -72,11 +72,11 @@ The `#include` statements in `main.cpp` have been updated to reference the `.h` 
       return 0;
   }
   ```
-- Rationale: 這是最差的雜湊函數，所有鍵值都映射到索引 0，導致極高的碰撞率（除了第一個鍵值外，所有鍵值都會碰撞）。
+- Rationale: 這是最差的雜湊函數，所有鍵值都映射到索引 0，導致極高的碰撞率（除了第一個鍵值外，所有鍵值都會碰撞），所以理論上來說根本不算是一種hash function。
 
 ### 第二次雜湊函數 (Second Hash Function)
 
-#### 整數鍵 (Integer Keys)
+#### 整數鍵 (Integer Keys) - Boundary Check
 - Formula / pseudocode:
   ```c
   // 第二次整數雜湊：邊界檢查與去負數
@@ -88,7 +88,7 @@ The `#include` statements in `main.cpp` have been updated to reference the `.h` 
   ```
 - Rationale: 在第一次的基礎上增加了對負數的處理，確保雜湊結果在 $0$ 到 $m-1$ 之間。對於給定的正數測試集，其分佈與第一次相同，但提高了函數的穩定性/安全性。
 
-#### 非整數鍵 (Non-integer Keys)
+#### 非整數鍵 (Non-integer Keys) - ASCII code operation
 - Formula / pseudocode:
   ```c
   // 第二次字串雜湊：Polynomial Rolling Hash 的簡化版
@@ -101,7 +101,7 @@ The `#include` statements in `main.cpp` have been updated to reference the `.h` 
       return (unsigned int)hash;
   }
   ```
-- Rationale: 採用一個簡化的多項式滾動雜湊（Polynomial Rolling Hash）概念，將每個字符轉換為一個數字（a=1, b=2, ...），並累加後取模。這比單純回傳 0 的方法有顯著改善，能根據字串內容產生不同的索引。
+- Rationale: 採用一個簡化的多項式滾動雜湊（Polynomial Rolling Hash）概念，並非是標準的PRH，我自己覺得這樣簡化後續再做比較好像會比較有說服力，將每個字符轉換為一個數字（a=1, b=2, ...），並累加後取模。這比單純回傳 0 的方法有顯著改善，能根據字串內容產生不同的索引，但後續做測試的時候才發現如果全部運算過後再取模效果會更優秀，但分析都已經跑完了，所以特別標註在這邊，下次要使用這個方法可以優化。
 
 ### 第三次雜湊函數 (Third Hash Function)
 
@@ -124,7 +124,7 @@ The `#include` statements in `main.cpp` have been updated to reference the `.h` 
       return hash % m;
   }
   ```
-- Rationale: 採用 Knuth 乘法雜湊（Multiplicative Hash）的變體，利用一個大質數常數 $A$ 進行乘法，並結合位移和 XOR 運算來最大化鍵值的位元差異，以達到更好的雪崩效應（Avalanche Effect）和均勻分佈。
+- Rationale: 採用 Knuth 乘法雜湊（Multiplicative Hash）的變體，利用一個大質數常數 $A$ 進行乘法，並結合位移和 XOR 運算來最大化鍵值的位元差異，以達到更好的雪崩效應（Avalanche Effect）和均勻分佈，也是參考其中一個網站做出來的做法，然後我查詢到的做法也是有些不同，所以我選擇一個我比較能理解的。
 
 #### 非整數鍵 (Non-integer Keys)
 - Formula / pseudocode:
@@ -142,11 +142,11 @@ The `#include` statements in `main.cpp` have been updated to reference the `.h` 
       return (unsigned int)hash;
   }
   ```
-- Rationale: 採用標準的多項式滾動雜湊（Polynomial Rolling Hash），利用質數基數 $p$ 和模數 $m$ 來計算字串的雜湊值。這是一種廣泛使用的字串雜湊方法，能夠有效分散字串鍵值，顯著降低碰撞。
+- Rationale: 採用標準的多項式滾動雜湊（Polynomial Rolling Hash），利用質數基數 $p$ 和模數 $m$ 來計算字串的雜湊值。能夠有效分散字串鍵值，顯著降低碰撞。而且多項式滾動雜湊網路上查詢到的做法也非常多，都有些許不同，我就按照直覺自己寫一種我自己能看懂的。
 
 ### 第四次雜湊函數：改進的字串雜湊 (Improved String Hash Functions)
 
-由於原本的字串雜湊（Polynomial Rolling Hash, PRH）在小樣本測試中表現不佳，我們引入了兩種業界常用的字串雜湊演算法進行比較與改進。
+由於原本的字串雜湊（Polynomial Rolling Hash, PRH）在小樣本測試中表現不佳，不確定是樣本規模/作法的問題，我自己去額外查詢了兩種業界常用的字串雜湊演算法進行比較與改進，也是去參考了一些網站的做法(都有放到最後的參考來源)。
 
 #### 1. DJB2 變體雜湊 (DJB2 Variant Hash)
 - **實作程式碼：**
@@ -155,7 +155,7 @@ The `#include` statements in `main.cpp` have been updated to reference the `.h` 
       hash = c + (hash << 6) + (hash << 16) - hash;
   ```
 - **優勢與特點：**
-  - **雪崩效應強：** 該函數是著名的 **DJB2 雜湊函數** 的變體。它利用了位移操作 `(hash << 6) + (hash << 16)` 進行混淆，並通過 `- hash` 進行調整，等效於 `hash = c + hash * 65599 - hash` 的變形，旨在最大化字元 `c` 對現有雜湊值 `hash` 的影響。
+  - **雪崩效應強：** 該函數是著名的 **DJB2 雜湊函數** 的變體。它利用了位移操作 `(hash << 6) + (hash << 16)` 進行混淆，並通過 `- hash` 進行調整，等效於 `hash = c + hash * 65599 - hash` 的變形，旨在最大化字元 `c` 對現有雜湊值 `hash` 的影響。一直提到的雪崩效應我自己的理解是，微小的輸入改變就可以造成輸出極大的變化。
   - **分佈均勻性：** 這種設計在實務中被證明具有極佳的**分佈均勻性**和**速度**，尤其適合處理長字串。
   - **改進之處：** 相較於 PRH 僅使用單一乘數（如 31 或 33），DJB2 變體透過多重位移和加減運算，提供了更複雜的位元混淆，進一步降低了碰撞的可能性。
 
@@ -166,7 +166,7 @@ The `#include` statements in `main.cpp` have been updated to reference the `.h` 
       hash = ((hash << 5) + hash) + c;
   ```
 - **優勢與特點：**
-  - **高效乘法：** 該函數是著名的 **SDBM 雜湊函數**。其核心操作 `(hash << 5) + hash` 等效於 `hash * 32 + hash`，即 `hash * 33`。這是一個非常高效的乘法操作，因為它完全由位移和加法實現，避免了昂貴的乘法指令。
+  - **高效乘法：** 該函數是著名的 **SDBM 雜湊函數**。其核心操作 `(hash << 5) + hash` 等效於 `hash * 32 + hash`，即 `hash * 33`。這是一個非常高效的乘法操作，因為它完全由位移和加法實現，避免了昂貴的乘法指令。我自己私底下寫leetcode的時候也發現，很多題目如果用一般運算run time都會超過限制，但如果利用位運算就可以快上許多，後續也查詢到了非常多關於位運算好用的技巧。
   - **速度快：** 由於其高效的計算方式，SDBM 雜湊在許多應用中表現出極快的計算速度。
   - **改進之處：** SDBM 雜湊的乘數 33 是一個經驗值，被認為在字串雜湊中能提供良好的分佈。它在計算效率上優於 PRH 的一般實作，並且在許多 UNIX 系統的資料庫中被廣泛使用。
 
@@ -476,7 +476,7 @@ The `#include` statements in `main.cpp` have been updated to reference the `.h` 
 
 ## 觀察 (Observation)
 ### 雜湊函數實作推斷與分類
-六種雜湊方法歸納如下：
+六種雜湊方法歸納如下 (以下所有分析我都用python寫腳本來做分析，python腳本來源是AI，然後我自己做微調來進行這些分析統整)：
 
 | 類別 | 版本 | 雜湊函數名稱 | 實作推斷 | 關鍵特性 |
 | :---: | :---: | :---: | :---: | :---: |
@@ -707,6 +707,8 @@ The `#include` statements in `main.cpp` have been updated to reference the `.h` 
 <br>
 參考來源：
 [1] Stack Overflow: Hash function for string (https://stackoverflow.com/questions/7666509/hash-function-for-string)<br>
-[2] Za-Cou-Han-Shu-Xing-Neng-Fen-Xi-Bao-Gao-Zui-Zhong-Ban.md （雜湊函數性能分析報告，2025）<br>
+[2] https://encode.su/threads/62-Knuth-s-Multiplicative-Hashing
 [3] CSDN Blog: 字符串哈希函数 (https://blog.csdn.net/boyxiaolong/article/details/34509091)<br>
 [4] Stack Overflow: What integer hash function are good that accepts an integer hash key (https://stackoverflow.com/questions/664014/what-integer-hash-function-are-good-that-accepts-an-integer-hash-key)
+[5] Professor's slides
+
